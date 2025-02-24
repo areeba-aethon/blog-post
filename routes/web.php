@@ -21,10 +21,6 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-// Route::middleware(['auth'])->group(function () {
-//     Route::get('/', [PostController::class, 'index'])->name('posts.index'); // Home Page (Post List)
-//     Route::resource('posts', PostController::class)->except(['index']); // CRUD for posts (except index)
-// });
 
 
 Route::middleware(['auth'])->group(function () {

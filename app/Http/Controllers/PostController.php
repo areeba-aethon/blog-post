@@ -28,16 +28,14 @@ class PostController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
     
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('posts', 'public');
-        } else {
-            $imagePath = null;
-        }
+        $image = $request->file('image');
+        $imageName = 'postimages'.'/'.time() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('postimages'), $imageName);
     
         $post = Post::create([
             'title' => $request->title,
             'content' => $request->content,
-            'image' => $imagePath,
+            'image' => $imageName,
         ]);
     
         return redirect()->route('home')->with('success', 'Post created successfully.');
@@ -64,17 +62,22 @@ public function update(Request $request, Post $post)
 
     if ($request->hasFile('image')) {
         if ($post->image) {
-            Storage::disk('public')->delete($post->image);
+            $oldImagePath = public_path($post->image);
+            if (file_exists($oldImagePath)) {
+                unlink($oldImagePath);
+            }
         }
-        $imagePath = $request->file('image')->store('posts', 'public');
+        $image = $request->file('image');
+        $imageName = 'postimages/' . time() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('postimages'), $imageName);
     } else {
-        $imagePath = $post->image;
+        $imageName= $post->image;
     }
 
     $post->update([
         'title' => $request->title,
         'content' => $request->content,
-        'image' => $imagePath,
+        'image' => $imageName,
     ]);
 
     return redirect()->route('posts.index')->with('success', 'Post updated successfully.');
@@ -82,7 +85,10 @@ public function update(Request $request, Post $post)
     public function destroy(Post $post)
     {
         if ($post->image) {
-            Storage::disk('public')->delete($post->image);
+            $oldImagePath = public_path($post->image);
+            if (file_exists($oldImagePath)) {
+                unlink($oldImagePath);
+            }
         }
 
         $post->delete();

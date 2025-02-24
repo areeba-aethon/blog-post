@@ -18,7 +18,7 @@
                     <h3>{{ $post->title }}</h3>
                     <p>{!!$post->content!!}</p>
                     @if ($post->image)
-                        <img src="{{ asset('storage/' . $post->image) }}" class="img-fluid  pb-3" width="300">
+                        <img src="{{asset($post->image) }}" class="img-fluid  pb-3" width="300">
                     @endif
                     <br>
                     

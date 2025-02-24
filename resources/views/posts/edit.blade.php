@@ -27,7 +27,7 @@
         <div class="mb-3">
             <label class="form-label">Current Image</label><br>
             @if ($post->image)
-                <img src="{{ asset('storage/' . $post->image) }}" class="img-thumbnail mb-2" width="200">
+                <img src="{{ asset($post->image) }}" class="img-thumbnail mb-2" width="200">
             @endif
         </div>
 
